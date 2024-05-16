@@ -96,5 +96,63 @@ namespace NZWalks.API.Controllers
             return CreatedAtAction(nameof(GetById), new { id = regionDto.Id }, regionDto);
         }
 
+        //Update Region by id
+        //PUT: https://localhost:44325/api/Regions/{id}
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public IActionResult Update([FromRoute] Guid id, [FromBody]UpdateRegionRequestDto regionDtoRq)
+        {
+
+            //Get from db
+            var region = dbContext.Regions.FirstOrDefault(i => i.Id == id);
+            if (region == null)
+                return NotFound();
+
+            //Update if exist
+            region.Code = regionDtoRq.Code;
+            region.Name = regionDtoRq.Name;
+            region.RegionImgUrl = regionDtoRq.RegionImgUrl;
+
+            dbContext.SaveChanges();
+
+            //Return DTO
+            var regionDto = new RegionDto
+            {
+                Id = region.Id,
+                Code = region.Code,
+                Name = region.Name,
+                RegionImgUrl = region.RegionImgUrl
+            };
+
+            return Ok(regionDto);
+        }
+
+        //Delete Region by id
+        //DELETE: https://localhost:44325/api/Regions/{id}
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public IActionResult Delete([FromRoute] Guid id)
+        {
+
+            //Get from db
+            var region = dbContext.Regions.FirstOrDefault(i => i.Id == id);
+            if (region == null)
+                return NotFound();
+
+            //delete if exist
+            dbContext.Remove(region);
+            dbContext.SaveChanges();
+
+            //Return DTO
+            var regionDto = new RegionDto
+            {
+                Id = region.Id,
+                Code = region.Code,
+                Name = region.Name,
+                RegionImgUrl = region.RegionImgUrl
+            };
+
+            return Ok(regionDto);
+        }
     }
 }
