@@ -21,7 +21,7 @@ namespace NZWalks.API.Controllers
         //Retrieve all regions from DB
         //GET: https://localhost:44325/api/Regions
         [HttpGet]
-        public IActionResult GetAllRegions()
+        public IActionResult GetAll()
         {
             //Get the domain regions from the db
             List<Region> regions = dbContext.Regions.ToList();
@@ -47,7 +47,7 @@ namespace NZWalks.API.Controllers
         //GET: https://localhost:44325/api/Regions/{id}
         [HttpGet]
         [Route("{id:Guid}")]
-        public IActionResult GetAllRegions([FromRoute]Guid id)
+        public IActionResult GetById([FromRoute]Guid id)
         {
             //Get from db
             var region = dbContext.Regions.FirstOrDefault(i=>i.Id==id);
@@ -65,5 +65,36 @@ namespace NZWalks.API.Controllers
             //Return DTO to client
             return Ok(regionDto);
         }
+
+        //Create region
+        //POST: https://localhost:44325/api/Regions
+        [HttpPost]
+        public IActionResult Create([FromBody]CreateRegionRequestDto regionDtoRq)
+        {
+            //convert DTO to Domain Model
+            var region = new Region
+            {
+                Code = regionDtoRq.Code,
+                Name = regionDtoRq.Name,
+                RegionImgUrl = regionDtoRq.RegionImgUrl
+            };
+
+            //Use Domain model to create the region 
+            dbContext.Regions.Add(region);
+            dbContext.SaveChanges();
+
+            //Map the Domain region to DTO 
+            var regionDto = new RegionDto
+            {
+                Id = region.Id,
+                Code = region.Code,
+                Name = region.Name,
+                RegionImgUrl = region.RegionImgUrl
+            };
+
+            //First parameter is used to add a header Location that contains the url to access this created object
+            return CreatedAtAction(nameof(GetById), new { id = regionDto.Id }, regionDto);
+        }
+
     }
 }
