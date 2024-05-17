@@ -4,7 +4,7 @@ namespace NZWalks.API.Repositories
 {
     public interface IWalkRepository
     {
-        Task<List<Walk>> GetAll();
+        Task<List<Walk>> GetAll(string? filterOn, string? filterQuery);
         Task<Walk?> GetById(Guid id);
         Task<Walk> Create(Walk region);
         Task<Walk?> Update(Guid id, Walk region);
