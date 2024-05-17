@@ -25,10 +25,10 @@ namespace NZWalks.API.Controllers
         //Retrieve all walks from DB
         //GET: https://localhost:44325/api/walks
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
+        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool isAscending) 
         {
             //Get the domain walks from the repository method
-            List<Walk> walks = await walkRepository.GetAll(filterOn,filterQuery);
+            List<Walk> walks = await walkRepository.GetAll(filterOn,filterQuery,sortBy,isAscending);
 
             //Return the DTO to the client
             return Ok(mapper.Map<List<WalkDto>>(walks));
