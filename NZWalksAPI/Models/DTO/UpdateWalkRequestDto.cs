@@ -1,14 +1,23 @@
-﻿namespace NZWalks.API.Models.DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace NZWalks.API.Models.DTO
 {
     public class UpdateWalkRequestDto
     {
-        //Created because I don´t want to received the ID in the request
-        //If I want to avoid the update of a property I can delete It here, so client can not change it
+        [Required]
+        [MaxLength(255)]
         public string Name { get; set; }
+
+        [Required]
         public string Description { get; set; }
+
+        [Required]
         public double LengthInKm { get; set; }
         public string? WalkImageUrl { get; set; }
+
+        [Required]
         public Guid DifficultyId { get; set; }
+        [Required]
         public Guid RegionId { get; set; }
     }
 }

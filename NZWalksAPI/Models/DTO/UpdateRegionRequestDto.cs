@@ -1,10 +1,14 @@
-﻿namespace NZWalks.API.Models.DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace NZWalks.API.Models.DTO
 {
     public class UpdateRegionRequestDto
     {
-        //Created because I don´t want to received the ID in the request
-        //If I want to avoid the update of a property I can delete It here, so client can not change it
+        [Required]
+        [Range(0, 3)]
         public string Code { get; set; }
+        [Required]
+        [MaxLength(255)]
         public string Name { get; set; }
         public string? RegionImgUrl { get; set; }
     }
