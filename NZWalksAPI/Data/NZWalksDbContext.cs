@@ -5,7 +5,8 @@ namespace NZWalks.API.Data
 {
     public class NZWalksDbContext : DbContext
     {
-        public NZWalksDbContext(DbContextOptions dbContextOptions)
+        //genereic dbcontext if want to use more than one dbcontext
+        public NZWalksDbContext(DbContextOptions<NZWalksDbContext> dbContextOptions)
             :base(dbContextOptions)
         {
             
