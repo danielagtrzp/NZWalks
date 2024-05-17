@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using NZWalks.API.Data;
 using NZWalks.API.Models.Domain;
 using NZWalks.API.Models.DTO;
+using NZWalks.API.Repositories;
 
 namespace NZWalks.API.Controllers
 {
@@ -13,10 +14,13 @@ namespace NZWalks.API.Controllers
     {
         //Dependency inyection of the DBContext that I already set in the container in Program
         private readonly NZWalksDbContext dbContext;
+        //Injection of the new repository, dbcontext will be deleted when all methods are ready
+        private readonly IRegionRepository regionRepository;
 
-        public RegionsController(NZWalksDbContext dbContext)
+        public RegionsController(NZWalksDbContext dbContext, IRegionRepository regionRepository)
         {
             this.dbContext = dbContext;
+            this.regionRepository = regionRepository;
         }
 
         //Retrieve all regions from DB
@@ -24,8 +28,8 @@ namespace NZWalks.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            //Get the domain regions from the db
-            List<Region> regions = await dbContext.Regions.ToListAsync<Region>();
+            //Get the domain regions from the repository method
+            List<Region> regions = await regionRepository.GetAllAsync();
 
             //Map the domain to DTO regions
             List<RegionDto> regionsDto = new List<RegionDto>();
